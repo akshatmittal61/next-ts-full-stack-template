@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import { AppSeo } from "@/constants";
 import React from "react";
 import { Seo } from "./Seo";
@@ -16,6 +17,7 @@ export const Wrapper: React.FC<any> = ({ children }) => {
 				og={AppSeo.og}
 			/>
 			{children}
+			<Toaster position="top-center" />
 		</>
 	);
 };

@@ -7,3 +7,5 @@ export const url: Record<T_URL, string> = {
 		process.env.NEXT_PUBLIC_BACKEND_BASE_URL ||
 		"http://localhost:3000/api/v1",
 };
+
+export const service = process.env.NEXT_PUBLIC_SERVICE || "template";
