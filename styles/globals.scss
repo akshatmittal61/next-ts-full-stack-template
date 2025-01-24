@@ -1,3 +1,5 @@
+@import "./config/index.scss";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -18,4 +20,19 @@ body {
 	color: var(--foreground);
 	background: var(--background);
 	font-family: Arial, Helvetica, sans-serif;
+}
+
+::-webkit-scrollbar {
+	width: 1.5px;
+	height: 1.5px;
+	background: transparent;
+
+	&-thumb {
+		background: rgba(0, 0, 0, 0.5);
+		border-radius: 500px;
+	}
+
+	&-track {
+		background: transparent;
+	}
 }
