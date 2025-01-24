@@ -2,6 +2,9 @@
 	"name": "next-ts-full-stack-template",
 	"version": "0.1.0",
 	"private": false,
+	"license": "MIT",
+	"repository": "https://github.com/akshatmittal61/next-ts-full-stack-template.git",
+	"author": "Akshat Mittal <akshatmittal2506@gmail.com>",
 	"engines": {
 		"node": ">=18.0.0",
 		"npm": "please-use-yarn",
@@ -23,12 +26,14 @@
 		"react-dom": "^19.0.0"
 	},
 	"devDependencies": {
+		"@commitlint/cli": "^19.6.1",
+		"@commitlint/config-conventional": "^19.6.0",
 		"@eslint/eslintrc": "^3",
 		"@types/node": "^20",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
-		"eslint": "^9",
-		"eslint-config-next": "15.1.6",
+		"eslint": "^8",
+		"eslint-config-next": "^15.1.6",
 		"husky": "^9.1.7",
 		"postcss": "^8",
 		"prettier": "^3.4.2",
