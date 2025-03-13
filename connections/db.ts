@@ -3,6 +3,8 @@ import { Logger } from "@/log";
 import { DatabaseManagerConfig, DbContainer } from "@/types";
 import mongoose from "mongoose";
 
+var cachedConnection: typeof mongoose | null = null;
+
 export class DatabaseManager {
 	private config: DatabaseManagerConfig;
 
@@ -20,12 +22,17 @@ export class DatabaseManager {
 
 	public async connect() {
 		try {
+			if (cachedConnection) {
+				Logger.info("MongoDB is already connected");
+				return true;
+			}
 			if (mongoose.connection.readyState === 1) {
 				Logger.info("MongoDB is already connected");
 				return true;
 			}
 			Logger.info("Connecting to MongoDB");
-			await mongoose.connect(this.config.uri);
+			const result = await mongoose.connect(this.config.uri);
+			cachedConnection = result;
 			Logger.info("MongoDB connected");
 			return true;
 		} catch (error: any) {
@@ -42,6 +49,7 @@ export class DatabaseManager {
 			}
 			Logger.info("Disconnecting from MongoDB");
 			await mongoose.disconnect();
+			cachedConnection = null;
 			Logger.info("MongoDB disconnected");
 		} catch (error: any) {
 			Logger.error("Error disconnecting from MongoDB", error.message);

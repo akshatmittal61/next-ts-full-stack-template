@@ -4,8 +4,8 @@ import { ApiController, ApiRequest, ApiResponse } from "@/types";
 import { ApiError, genericParse, getNonEmptyString } from "@/utils";
 
 export class ServerMiddleware {
-	public static async authenticatedRoute(next: ApiController) {
-		return (req: ApiRequest, res: ApiResponse) => {
+	public static authenticatedRoute(next: ApiController): ApiController {
+		return async (req: ApiRequest, res: ApiResponse) => {
 			try {
 				const token = genericParse(
 					getNonEmptyString,
@@ -24,8 +24,8 @@ export class ServerMiddleware {
 			}
 		};
 	}
-	public static async adminRoute(next: ApiController) {
-		return (req: ApiRequest, res: ApiResponse) => {
+	public static adminRoute(next: ApiController): ApiController {
+		return async (req: ApiRequest, res: ApiResponse) => {
 			try {
 				const role = genericParse(getNonEmptyString, req.cookies.role);
 				if (role !== "admin") {

@@ -2,6 +2,7 @@ import { service, url } from "@/config";
 
 export const frontendBaseUrl: string = url.frontend;
 export const backendBaseUrl: string = url.backend;
+export const dbUri: string = url.db;
 export const logsBaseUrl: string = "logs";
 export const serviceName = service;
 export const nodeEnv: "development" | "production" | "test" =
