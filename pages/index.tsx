@@ -1,9 +1,11 @@
 import { Button, CheckBox, Input, Pane, Popup, Typography } from "@/library";
 import { Logger } from "@/log";
+import { useAuthStore } from "@/store";
 import React, { useState } from "react";
 import { FiAlertTriangle } from "react-icons/fi";
 
 const HomePage: React.FC = () => {
+	const { user, isLoading, isLoggedIn } = useAuthStore({ syncOnMount: true });
 	const [check, setCheck] = useState(false);
 	const [openPopup, setOpenPopup] = useState(false);
 	const [openPane, setOpenPane] = useState(false);
@@ -18,6 +20,17 @@ const HomePage: React.FC = () => {
 				>
 					Home Page
 				</Typography>
+				<pre>
+					{JSON.stringify(
+						isLoading
+							? { state: "loading" }
+							: isLoggedIn
+								? { state: "loggedIn", user }
+								: { state: "loggedOut", user },
+						null,
+						2
+					)}
+				</pre>
 				<Button
 					onClick={() => {
 						throw new Error("Just for Error Boundary");
