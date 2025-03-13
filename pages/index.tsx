@@ -1,9 +1,10 @@
-import { Button, Pane, Popup, Typography } from "@/library";
+import { Button, CheckBox, Input, Pane, Popup, Typography } from "@/library";
 import { Logger } from "@/log";
 import React, { useState } from "react";
 import { FiAlertTriangle } from "react-icons/fi";
 
 const HomePage: React.FC = () => {
+	const [check, setCheck] = useState(false);
 	const [openPopup, setOpenPopup] = useState(false);
 	const [openPane, setOpenPane] = useState(false);
 	return (
@@ -29,6 +30,13 @@ const HomePage: React.FC = () => {
 				</Button>
 				<Button onClick={() => setOpenPopup(true)}>Open Popup</Button>
 				<Button onClick={() => setOpenPane(true)}>Open Pane</Button>
+				<div className="w-1/2 flex justify-center items-center gap-2">
+					<Input placeholder="Input" label="Label" />
+					<CheckBox
+						checked={check}
+						onChange={() => setCheck((p) => !p)}
+					/>
+				</div>
 			</main>
 			{openPopup ? (
 				<Popup
