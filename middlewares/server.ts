@@ -1,7 +1,7 @@
 import { HTTP } from "@/constants";
 import { Logger } from "@/log";
 import { ApiController, ApiRequest, ApiResponse } from "@/types";
-import { ApiError, genericParse, getNonEmptyString } from "@/utils";
+import { ApiFailure, genericParse, getNonEmptyString } from "@/utils";
 
 export class ServerMiddleware {
 	public static authenticatedRoute(next: ApiController): ApiController {
@@ -17,7 +17,7 @@ export class ServerMiddleware {
 				return next(req, res);
 			} catch (error) {
 				Logger.error(error);
-				return ApiError(res).send(
+				return ApiFailure(res).send(
 					HTTP.message.UNAUTHORIZED,
 					HTTP.status.UNAUTHORIZED
 				);
@@ -34,7 +34,7 @@ export class ServerMiddleware {
 				return next(req, res);
 			} catch (error) {
 				Logger.error(error);
-				return ApiError(res).send(
+				return ApiFailure(res).send(
 					HTTP.message.FORBIDDEN,
 					HTTP.status.FORBIDDEN
 				);

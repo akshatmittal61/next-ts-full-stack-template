@@ -1,4 +1,5 @@
 import { apiMethods, dbUri, HTTP } from "@/constants";
+import { ApiError, DbConnectionError, ParserSafetyError } from "@/errors";
 import { Logger } from "@/log";
 import { ServerMiddleware } from "@/middlewares";
 import {
@@ -10,6 +11,7 @@ import {
 	DbContainer,
 	T_API_METHODS,
 } from "@/types";
+import { ApiFailure } from "@/utils";
 import { NextApiHandler } from "next";
 import { DatabaseManager } from ".";
 
@@ -123,16 +125,18 @@ export class ApiRoute {
 				}
 
 				const { method } = req;
+				// We need the handler to run by async/await to catch errors
 				if (method === apiMethods.GET && this.GET) {
-					return this.wrapper(this.GET)(req, res);
+					return await this.wrapper(this.GET)(req, res);
 				} else if (method === apiMethods.POST && this.POST) {
-					return this.wrapper(this.POST)(req, res);
+					Logger.debug("About to", req.body, this.POST.name);
+					return await this.wrapper(this.POST)(req, res);
 				} else if (method === apiMethods.PUT && this.PUT) {
-					return this.wrapper(this.PUT)(req, res);
+					return await this.wrapper(this.PUT)(req, res);
 				} else if (method === apiMethods.PATCH && this.PATCH) {
-					return this.wrapper(this.PATCH)(req, res);
+					return await this.wrapper(this.PATCH)(req, res);
 				} else if (method === apiMethods.DELETE && this.DELETE) {
-					return this.wrapper(this.DELETE)(req, res);
+					return await this.wrapper(this.DELETE)(req, res);
 				} else {
 					res.setHeader("Allow", this.allowedMethods);
 					return res
@@ -140,11 +144,24 @@ export class ApiRoute {
 						.send(`Method ${method} Not Allowed`);
 				}
 			} catch (error: any) {
-				Logger.error(error);
-				return res.status(HTTP.status.INTERNAL_SERVER_ERROR).json({
-					message:
+				if (error instanceof ApiError) {
+					return ApiFailure(res).send(error.message, error.status);
+				} else if (error instanceof DbConnectionError) {
+					return ApiFailure(res).send(
+						error.message || "Unable to connect to database",
+						HTTP.status.SERVICE_UNAVAILABLE
+					);
+				} else if (error instanceof ParserSafetyError) {
+					return ApiFailure(res).send(
+						error.message || HTTP.message.BAD_REQUEST,
+						HTTP.status.BAD_REQUEST
+					);
+				} else {
+					return ApiFailure(res).send(
 						error.message || HTTP.message.INTERNAL_SERVER_ERROR,
-				});
+						HTTP.status.INTERNAL_SERVER_ERROR
+					);
+				}
 			}
 		};
 

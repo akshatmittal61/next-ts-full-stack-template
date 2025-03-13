@@ -1,10 +1,20 @@
+import { ParserSafetyError } from "../errors";
+// TODO: Replace with zod
+
 export const genericParse = <T>(parse: (_: any) => T, input: any): T => {
 	try {
 		const output = parse(input);
 		return output;
-	} catch {
-		// return null;
-		throw new Error(`Invalid input: ${input}`);
+	} catch (error) {
+		if (error instanceof ParserSafetyError) {
+			throw error;
+		} else {
+			throw new ParserSafetyError(
+				`Invalid input: ${input}`,
+				input,
+				input
+			);
+		}
 	}
 };
 
@@ -18,10 +28,11 @@ export const safeParse = <T>(parse: (_: any) => T, input: any): T | null => {
 };
 
 export const getString = <T extends string>(input: any): T => {
-	// TODO: Replace with zod
 	if (typeof input != "string") {
-		throw new Error(
-			`${input} of type ${typeof input} is not a valid string!`
+		throw new ParserSafetyError(
+			`${input} of type ${typeof input} is not a valid string!`,
+			"String",
+			input
 		);
 	}
 	return input as T;
@@ -30,22 +41,30 @@ export const getString = <T extends string>(input: any): T => {
 export const getNonEmptyString = <T extends string>(input: any): T => {
 	const output = getString<T>(input);
 	if (output === "") {
-		throw new Error(`${input} is an empty string!`);
+		throw new ParserSafetyError(
+			`${input} is an empty string!`,
+			"Non-empty string",
+			input
+		);
 	}
 	return output;
 };
 
 export const getNumber = (input: any): number => {
 	if (typeof input !== "string" && typeof input !== "number") {
-		throw new Error(
-			`${input} of type ${typeof input} is not a valid number!`
+		throw new ParserSafetyError(
+			`${input} of type ${typeof input} is not a valid number!`,
+			"Number",
+			input
 		);
 	}
 	const int = Number(`${input}`);
 
 	if (isNaN(int)) {
-		throw new Error(
-			`${input} of type ${typeof input} is not a valid number!`
+		throw new ParserSafetyError(
+			`${input} of type ${typeof input} is not a valid number!`,
+			"Number",
+			input
 		);
 	}
 
@@ -56,7 +75,11 @@ export const getNonNegativeNumber = (input: any): number => {
 	const int = getNumber(input);
 
 	if (int < 0) {
-		throw new Error(`${int} is not a non-negative number!`);
+		throw new ParserSafetyError(
+			`${int} is not a non-negative number!`,
+			"Non-negative number",
+			input
+		);
 	}
 
 	return int;
@@ -68,8 +91,10 @@ export const getBoolean = (input: any): boolean => {
 		(typeof input === "string" && input !== "true" && input !== "false") ||
 		(typeof input === "number" && input !== 0 && input !== 1)
 	) {
-		throw new Error(
-			`${input} of type ${typeof input} is not a valid boolean!`
+		throw new ParserSafetyError(
+			`${input} of type ${typeof input} is not a valid boolean!`,
+			"Boolean",
+			input
 		);
 	}
 
@@ -84,8 +109,10 @@ export const getBoolean = (input: any): boolean => {
 
 export const getArray = <T = string>(input: any): T[] => {
 	if (!Array.isArray(input)) {
-		throw new Error(
-			`${input} of type ${typeof input} is not a valid array!`
+		throw new ParserSafetyError(
+			`${input} of type ${typeof input} is not a valid array!`,
+			"Array",
+			input
 		);
 	}
 
@@ -93,16 +120,21 @@ export const getArray = <T = string>(input: any): T[] => {
 };
 
 export const getSingletonValue = <T>(input: T[]): T => {
-	if (input.length !== 1) {
-		throw new Error(`${input} is not a singleton array!`);
+	const arr = getArray<T>(input);
+	if (arr.length !== 1) {
+		throw new ParserSafetyError(
+			`${arr} is not a singleton array!`,
+			"Singleton",
+			arr
+		);
 	}
 
-	return input[0];
+	return arr[0];
 };
 
 export const getNonNullValue = <T>(input: T | undefined | null): T => {
 	if (input === null || input === undefined) {
-		throw new Error(`${input} is null!`);
+		throw new ParserSafetyError(`${input} is null!`, "Non-null", input);
 	}
 
 	return input;

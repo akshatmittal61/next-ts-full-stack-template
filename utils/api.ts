@@ -13,7 +13,7 @@ export const ApiSuccess = (res: ApiResponse) => {
 	};
 };
 
-export const ApiError = (res: ApiResponse) => {
+export const ApiFailure = (res: ApiResponse) => {
 	return {
 		send: (
 			message: string = HTTP.message.ERROR,

@@ -11,6 +11,6 @@ export class ModelFactory<T = any> {
 		return new mongoose.Schema<T>(input, { timestamps: true });
 	}
 	private getModel(name: string): mongoose.Model<T> {
-		return mongoose.model<T>(name, this.schema);
+		return mongoose.models[name] || mongoose.model<T>(name, this.schema);
 	}
 }
