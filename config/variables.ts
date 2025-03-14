@@ -14,3 +14,6 @@ export const nodeEnv: T_NODE_ENV =
 	process.env.NODE_ENV || process.env.NEXT_PUBLIC_NODE_ENV || "production";
 
 export const service = process.env.NEXT_PUBLIC_SERVICE || "template";
+
+export const enableDebugging: boolean =
+	process.env.NEXT_PUBLIC_ENABLE_DEBUGGING === "true" || false;

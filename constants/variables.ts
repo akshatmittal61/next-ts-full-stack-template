@@ -5,8 +5,6 @@ export const backendBaseUrl: string = url.backend;
 export const dbUri: string = url.db;
 export const logsBaseUrl: string = "logs";
 export const serviceName = service;
-export const nodeEnv: "development" | "production" | "test" =
-	process.env.NODE_ENV || process.env.NEXT_PUBLIC_NODE_ENV || "production";
 
 export const fallbackAssets = Object.freeze({
 	avatar: `${frontendBaseUrl}/vectors/user.svg`,
