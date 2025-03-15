@@ -12,7 +12,7 @@
 - [x] Prettier
 - [x] Husky
 - [x] Commitlint
-- [x] Jest
+- [x] Zustand
 
 ## Usage
 
@@ -72,5 +72,5 @@ yarn format
 - [Prettier](https://prettier.io)
 - [Husky](https://typicode.github.io/husky)
 - [Commitlint](https://commitlint.js.org)
-- [Jest](https://jestjs.io)
+- [Zustand](https://zustand-demo.pmnd.rs/)
 - [Tailwind CSS](https://tailwindcss.com)
