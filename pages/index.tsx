@@ -3,6 +3,7 @@ import {
 	Button,
 	CheckBox,
 	Input,
+	MaterialIcon,
 	Pane,
 	Popup,
 	Typography,
@@ -39,6 +40,12 @@ const HomePage: React.FC = () => {
 						2
 					)}
 				</pre>
+				<Avatar
+					src="https://github.com/akshatmittal61.png"
+					alt="Akshat"
+					size="small"
+				/>
+				<MaterialIcon icon="home" />
 				<Button
 					onClick={() => {
 						throw new Error("Just for Error Boundary");
