@@ -1,4 +1,4 @@
-import { T_API_METHODS, T_USER_ROLE } from "@/types";
+import { AppTheme, T_API_METHODS, T_USER_ROLE } from "@/types";
 import { getEnumeration } from "@/utils";
 
 export const USER_ROLE = getEnumeration<T_USER_ROLE>([
@@ -14,6 +14,8 @@ export const apiMethods = getEnumeration<T_API_METHODS>([
 	"PATCH",
 	"DELETE",
 ]);
+
+export const appTheme = getEnumeration<AppTheme>(["light", "dark"]);
 
 const message = Object.freeze({
 	SUCCESS: "Success",
