@@ -2,6 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 export type ApiRequest = NextApiRequest & {};
 export type ApiResponse = NextApiResponse & {};
+export type Cookie = {
+	name: string;
+	value: string;
+	maxAge: number;
+};
 
 export type ApiRes<T> = { message: string; data: T };
 
