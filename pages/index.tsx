@@ -1,4 +1,12 @@
-import { Button, CheckBox, Input, Pane, Popup, Typography } from "@/library";
+import {
+	Avatar,
+	Button,
+	CheckBox,
+	Input,
+	Pane,
+	Popup,
+	Typography,
+} from "@/library";
 import { Logger } from "@/log";
 import { useAuthStore } from "@/store";
 import React, { useState } from "react";
@@ -61,7 +69,11 @@ const HomePage: React.FC = () => {
 				</Popup>
 			) : null}
 			{openPane ? (
-				<Pane title="Pane Title" onClose={() => setOpenPane(false)}>
+				<Pane
+					title="Pane Title"
+					direction="bottom"
+					onClose={() => setOpenPane(false)}
+				>
 					You are in a pane
 				</Pane>
 			) : null}

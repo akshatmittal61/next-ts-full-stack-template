@@ -12,4 +12,9 @@
 	--accent-color: #3f51b5;
 	--theme-bg: #fff;
 	--theme-fg: var(--accent-color);
+
+	--shadow-color: 0, 0, 0;
+	--back-shadow: rgba(0, 0, 0, 0.15);
+	--back-shadow-dark: rgba(0, 0, 0, 0.2);
+	--back-shadow-light: rgba(0, 0, 0, 0.05);
 }
