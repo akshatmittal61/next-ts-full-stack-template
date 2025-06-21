@@ -42,7 +42,6 @@ const store = create<Store>((set, get) => {
 		setTheme: (theme) => {
 			set({ theme });
 			document.body.dataset.theme = theme;
-			localStorage.setItem("theme", theme);
 		},
 		setAccentColor: (accentColor) => set({ accentColor }),
 		setNetworkStatus: (networkStatus) => set({ networkStatus }),
@@ -100,8 +99,10 @@ export const useUiStore: UiStoreHook = (options = {}) => {
 
 	const toggleTheme = () => {
 		if (store.theme === appTheme.light) {
+			localStorage.setItem("theme", appTheme.dark);
 			store.setTheme(appTheme.dark);
 		} else {
+			localStorage.setItem("theme", appTheme.light);
 			store.setTheme(appTheme.light);
 		}
 	};

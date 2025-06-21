@@ -74,8 +74,8 @@ class CacheService {
 		data: CachePayloadGenerator<T>
 	): string {
 		if (parameter === cacheParameter.USER) {
-			if ("token" in data) {
-				return `user:${data.token}`;
+			if ("id" in data) {
+				return `user:${data.id}`;
 			}
 			throw new Error("Invalid data: token is missing");
 		} else {

@@ -7,3 +7,8 @@ export const routes = Object.freeze({
 	register: "/register",
 	settings: "/settings",
 });
+
+export const protectedRoutes: Array<string> = [
+	routes.dashboard,
+	routes.settings,
+];
