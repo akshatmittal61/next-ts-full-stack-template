@@ -11,6 +11,7 @@ export interface InputProps
 	styles?: {
 		box?: React.CSSProperties;
 		label?: React.CSSProperties;
+		container?: React.CSSProperties;
 		input?: React.CSSProperties;
 		dropdown?: React.CSSProperties;
 		dropdownOption?: React.CSSProperties;
