@@ -1,19 +1,25 @@
 import { AuthApi } from "@/api";
 import { IUser } from "@/types";
-import { useEffect, useState } from "react";
+import { StringUtils } from "@/utils";
+import { useEffect } from "react";
 import { create } from "zustand";
 import { createSelectors } from "./utils";
 
 type State = {
 	user: IUser | null;
+	isLoading: boolean;
 	isLoggedIn: boolean;
 };
 
+type Getter<T extends keyof State> = () => State[T];
 type Setter<T extends keyof State> = (_: State[T]) => void;
 
 type Action = {
+	getUser: Getter<"user">;
+	getIsLoading: Getter<"isLoading">;
+	getIsLoggedIn: Getter<"isLoggedIn">;
 	setUser: Setter<"user">;
-	setIsLoggedIn: Setter<"isLoggedIn">;
+	setIsLoading: Setter<"isLoading">;
 };
 
 type Store = State & Action;
@@ -21,11 +27,19 @@ type Store = State & Action;
 const store = create<Store>((set, get) => {
 	return {
 		user: null,
+		isLoading: false,
 		isLoggedIn: false,
 		getUser: () => get().user,
+		getIsLoading: () => get().isLoading,
 		getIsLoggedIn: () => get().isLoggedIn,
-		setUser: (user) => set({ user }),
-		setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
+		setUser: (user) => {
+			if (user && user !== null && StringUtils.isNotEmpty(user.id)) {
+				set({ user, isLoggedIn: true });
+			} else {
+				set({ user, isLoggedIn: false });
+			}
+		},
+		setIsLoading: (isLoading) => set({ isLoading }),
 	};
 });
 
@@ -36,27 +50,23 @@ type Options = {
 };
 
 type ReturnType = Store & {
-	sync: () => void;
-	isLoading: boolean;
+	sync: () => Promise<void>;
 };
 
 type AuthStoreHook = (_?: Options) => ReturnType;
 
 export const useAuthStore: AuthStoreHook = (options = {}) => {
 	const store = useStore();
-	const [isLoading, setIsLoading] = useState(false);
 
 	const sync = async () => {
 		try {
-			setIsLoading(true);
+			store.setIsLoading(true);
 			const res = await AuthApi.verify();
 			store.setUser(res.data);
-			store.setIsLoggedIn(true);
 		} catch {
 			store.setUser(null);
-			store.setIsLoggedIn(false);
 		} finally {
-			setIsLoading(false);
+			store.setIsLoading(false);
 		}
 	};
 
@@ -69,7 +79,6 @@ export const useAuthStore: AuthStoreHook = (options = {}) => {
 
 	return {
 		...store,
-		isLoading,
 		sync,
 	};
 };
