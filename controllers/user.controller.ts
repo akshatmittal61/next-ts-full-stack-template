@@ -1,6 +1,7 @@
+import { ApiSuccess } from "@/server";
 import { UserService } from "@/services";
 import { ApiRequest, ApiResponse } from "@/types";
-import { ApiSuccess, genericParse, getNonEmptyString } from "@/utils";
+import { genericParse, getNonEmptyString } from "@/utils";
 
 export class UserController {
 	public static async hello(_: ApiRequest, res: ApiResponse) {

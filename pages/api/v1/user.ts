@@ -1,5 +1,5 @@
-import { ApiRoute } from "@/connections";
 import { UserController } from "@/controllers";
+import { ApiRoute } from "@/server";
 
 const apiRouter = new ApiRoute(
 	{ GET: UserController.hello, POST: UserController.getUserByEmail },

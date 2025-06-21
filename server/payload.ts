@@ -1,4 +1,5 @@
 import { HTTP } from "@/constants";
+import { Logger } from "@/log";
 import { ApiRes, ApiResponse, Cookie } from "@/types";
 
 abstract class ApiBaseResponse<T> {
@@ -13,7 +14,12 @@ abstract class ApiBaseResponse<T> {
 		};
 	}
 	public status(status: number): this {
+		this.payload.status = status;
 		this.res.status(status);
+		return this;
+	}
+	public headers(key: string, value: any): this {
+		this.res.setHeader(key, value);
 		return this;
 	}
 	public message(message: string): this {
@@ -21,7 +27,7 @@ abstract class ApiBaseResponse<T> {
 			...this.payload,
 			message,
 		};
-		this.res.json(payload);
+		this.payload = payload;
 		return this;
 	}
 	public cookies(cookies: Array<Cookie>): this {
@@ -49,6 +55,14 @@ export class ApiSuccess<T> extends ApiBaseResponse<T> {
 	constructor(r: ApiResponse) {
 		super(r);
 	}
+	public data(data: T): ApiSuccess<T> {
+		const payload = {
+			...this.payload,
+			data,
+		};
+		this.payload = payload;
+		return this;
+	}
 	public send(
 		data?: T,
 		message: string = this.payload.message,
@@ -61,15 +75,13 @@ export class ApiSuccess<T> extends ApiBaseResponse<T> {
 		if (data) {
 			payload.data = data;
 		}
+		if (this.res.headersSent || this.res.writableEnded) {
+			return Logger.error(
+				"Response already sent, cannot send response",
+				payload
+			);
+		}
 		this.status(status).json(payload).end();
-	}
-	public data(data: T): ApiSuccess<T> {
-		const payload = {
-			...this.payload,
-			data,
-		};
-		this.res.json(payload);
-		return this;
 	}
 }
 
@@ -83,6 +95,12 @@ export class ApiFailure extends ApiBaseResponse<null> {
 		message: string = this.payload.message,
 		status: number = this.payload.status
 	): void {
+		if (this.res.headersSent || this.res.writableEnded) {
+			return Logger.error("Response already sent, cannot send response", {
+				status,
+				message,
+			});
+		}
 		this.status(status).message(message).end();
 	}
 }

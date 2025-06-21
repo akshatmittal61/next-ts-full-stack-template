@@ -1,7 +1,8 @@
 import { HTTP, USER_ROLE } from "@/constants";
 import { Logger } from "@/log";
 import { ApiController, ApiRequest, ApiResponse } from "@/types";
-import { ApiFailure, genericParse, getNonEmptyString } from "@/utils";
+import { genericParse, getNonEmptyString } from "@/utils";
+import { ApiFailure } from "./payload";
 
 export class ServerMiddleware {
 	public static authenticatedRoute(next: ApiController): ApiController {
