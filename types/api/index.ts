@@ -29,3 +29,9 @@ export type ApiWrapperOptions = {
 };
 
 export type T_API_METHODS = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+
+export type Cookie = {
+	name: string;
+	value: string;
+	maxAge: number;
+};
