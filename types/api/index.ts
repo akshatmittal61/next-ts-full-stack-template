@@ -35,3 +35,7 @@ export type Cookie = {
 	value: string;
 	maxAge: number;
 };
+
+export type Headers = {
+	[key: string]: any;
+};

@@ -1,4 +1,9 @@
-import { cacheParameter, CHECK_INTERVAL, TTL_SECONDS } from "@/constants";
+import {
+	cacheParameter,
+	CHECK_INTERVAL,
+	MAX_KEYS,
+	TTL_SECONDS,
+} from "@/constants";
 import { Logger } from "@/log";
 import { CacheParameter, CachePayloadGenerator } from "@/types";
 import NodeCache from "node-cache";
@@ -11,12 +16,12 @@ class CacheService {
 			stdTTL: TTL_SECONDS,
 			checkperiod: CHECK_INTERVAL,
 			useClones: false,
-			maxKeys: 2000,
+			maxKeys: MAX_KEYS,
 		});
 		global.cache = this;
 	}
 
-	public set(key: string, value: any, ttl: number = TTL_SECONDS) {
+	public set<T>(key: string, value: T, ttl: number = TTL_SECONDS) {
 		this.cache.set(key, value, ttl);
 	}
 
@@ -40,7 +45,7 @@ class CacheService {
 	 * Fetches a value from the cache by key, or executes a callback to retrieve the value if it's not cached.
 	 *
 	 * @param {string} key - The cache key to fetch the value for.
-	 * @param {(_?: any) => Promise<T>} callback - A callback function to execute if the value is not cached.
+	 * @param {() => Promise<T>} callback - A callback function to execute if the value is not cached.
 	 * @return {Promise<T>} The cached or newly retrieved value.
 	 */
 	public async fetch<T>(key: string, callback: () => Promise<T>): Promise<T> {
@@ -50,7 +55,7 @@ class CacheService {
 			key !== "undefined" &&
 			key !== "null"
 		) {
-			const cachedValue: any = this.cache.get(key);
+			const cachedValue: T | undefined = this.cache.get<T>(key);
 			if (cachedValue) {
 				Logger.info(`Cache hit for ${key}`);
 				return cachedValue;
