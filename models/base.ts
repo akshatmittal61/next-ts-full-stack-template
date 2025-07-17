@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 export class ModelFactory<T = any> {
 	private schema: mongoose.Schema<T>;
 	public model: mongoose.Model<T>;
-	public constructor(name: string, schema: T) {
+	public constructor(name: string, schema: any) {
 		this.schema = this.getSchema(schema);
 		this.model = this.getModel(name);
 	}
