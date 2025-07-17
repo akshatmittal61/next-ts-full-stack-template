@@ -8,7 +8,7 @@ export type ApiRequest<T = any> = Omit<NextApiRequest, "body"> & {
 	body: T;
 	user?: IUser;
 };
-export type ApiResponse = NextApiResponse & { locals?: { body?: any } };
+export type ApiResponse = NextApiResponse;
 
 export type ApiRes<T> = { message: string; data: T };
 
