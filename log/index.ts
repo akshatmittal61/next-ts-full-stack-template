@@ -108,18 +108,22 @@ export class Logger {
 	}
 
 	public static verbose(...messages: Array<any>) {
+		if (!enableDebugging) return;
 		Logger.logMessages("verbose", messages);
 	}
 
 	public static silly(...messages: Array<any>) {
+		if (!enableDebugging) return;
 		Logger.logMessages("silly", messages);
 	}
 
 	public static http(...messages: Array<any>) {
+		if (!enableDebugging) return;
 		Logger.logMessages("http", messages);
 	}
 
 	public static log(...messages: Array<any>) {
+		if (!enableDebugging) return;
 		Logger.logMessages("log", messages);
 	}
 }
