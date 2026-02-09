@@ -1,3 +1,3 @@
-import { User } from "./models";
+import { User } from "./schema";
 
 export type IUser = Omit<User, "createdAt" | "updatedAt">;

@@ -4,7 +4,7 @@ export * from "./client";
 export * from "./db";
 export * from "./enum";
 export * from "./files";
-export * from "./models";
+export * from "./schema";
 export * from "./parser";
 export * from "./seo";
 export * from "./server";

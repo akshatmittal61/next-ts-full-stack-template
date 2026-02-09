@@ -1,6 +1,7 @@
 import { USER_ROLE } from "@/constants";
+import { Schema, User } from "@/types";
 
-export const UserSchema = {
+export const UserSchema: Schema<User> = {
 	name: {
 		type: String,
 	},
