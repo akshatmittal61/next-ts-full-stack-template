@@ -1,6 +1,6 @@
 {
 	"name": "next-ts-full-stack-template",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"private": false,
 	"license": "MIT",
 	"repository": "https://github.com/akshatmittal61/next-ts-full-stack-template.git",
@@ -17,20 +17,21 @@
 		"lint": "next lint",
 		"test": "echo \"Error: no test specified\" && exit 0",
 		"clean": "rm -rf .next/ && rm -rf dist/ && rm -rf .cache/ && rm -rf .yarn/ && rm -rf coverage/",
+		"reset": "yarn clean && rm -rf node_modules/ && rm -rf logs/",
 		"format": "prettier --write .",
 		"format:check": "prettier --check .",
-		"prepare": "husky"
+		"prepare": "husky install"
 	},
 	"dependencies": {
 		"axios": "^1.8.3",
-		"mongoose": "^8.9.6",
+		"mongoose": "^8.18.0",
 		"next": "15.2.3",
 		"node-cache": "^5.1.2",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"react-hot-toast": "^2.5.1",
 		"react-icons": "^5.5.0",
-		"zustand": "^5.0.3"
+		"zustand": "^5.0.10"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^19.6.1",

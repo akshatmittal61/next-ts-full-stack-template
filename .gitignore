@@ -24,6 +24,7 @@
 .DS_Store
 *.pem
 .swc/
+/logs/
 
 # debug
 npm-debug.log*
@@ -39,10 +40,8 @@ bun.lockb
 
 # local env files
 .env
-.env.local
-.env.development
-.env.test
-.env.production
+.env.*
+!.env.example
 
 # vercel
 .vercel
@@ -56,3 +55,7 @@ next-env.d.ts
 /.obsidian
 /.idea
 .DS_Store
+
+# service workers
+public/sw.js
+public/workbox-*.js
