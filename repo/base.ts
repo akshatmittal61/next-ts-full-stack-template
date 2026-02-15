@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-import { CreateModel, FilterQuery, UpdateQuery } from "@/types";
-import { getNonNullValue, getObjectFromMongoResponse } from "@/utils";
+import { FilterQuery, UpdateQuery } from "@/db";
+import { CreateModel } from "@/types";
+import { getObjectFromMongoResponse, SafetyUtils } from "@/utils";
 
 export abstract class BaseRepo<T = any, P = T> {
 	protected abstract model: mongoose.Model<T>;
@@ -102,7 +103,7 @@ export abstract class BaseRepo<T = any, P = T> {
 	 */
 	public async create(body: CreateModel<T>): Promise<P> {
 		const res = await this.model.create<CreateModel<T>>(body);
-		return getNonNullValue(this.parser(res));
+		return SafetyUtils.getNonNullValue(this.parser(res));
 	}
 
 	/**

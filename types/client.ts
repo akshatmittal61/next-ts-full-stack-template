@@ -1,3 +1,5 @@
 import { User } from "./schema";
 
-export type IUser = Omit<User, "createdAt" | "updatedAt">;
+// Types prefixed with `I` are client-specific models
+
+export type IUser = User;
