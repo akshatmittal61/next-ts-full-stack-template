@@ -10,6 +10,7 @@ import { Model } from "./parser";
 export type User = Model<{
 	name?: string;
 	email: string;
+	avatar?: string;
 	role: T_USER_ROLE;
 }>;
 
