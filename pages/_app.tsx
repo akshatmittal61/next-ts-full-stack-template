@@ -1,11 +1,15 @@
-import { Wrapper } from "@/components";
+import { PagePropsProvider } from "@/contexts/PagePropsContext";
+import { AppModule } from "@/layouts";
 import "@/styles/globals.scss";
+import "aos/dist/aos.css";
 import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
 	return (
-		<Wrapper>
-			<Component {...pageProps} />
-		</Wrapper>
+		<PagePropsProvider props={pageProps}>
+			<AppModule>
+				<Component {...pageProps} />
+			</AppModule>
+		</PagePropsProvider>
 	);
 }
