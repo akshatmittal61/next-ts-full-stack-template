@@ -1,48 +1,66 @@
-import { HTTP, USER_ROLE } from "@/constants";
+import { AuthConstants, HTTP } from "@/constants";
 import { Logger } from "@/log";
+import { AuthService } from "@/services";
 import { ApiController, ApiRequest, ApiResponse } from "@/types";
-import { genericParse, getNonEmptyString } from "@/utils";
-import { ApiFailure } from "./payload";
+import { SafetyUtils, StringUtils } from "@/utils";
+import { ApiFailure, ApiSuccess } from "./payload";
 
 export class ServerMiddleware {
 	public static authenticatedRoute(next: ApiController): ApiController {
 		return async (req: ApiRequest, res: ApiResponse) => {
 			try {
-				// Update with your authentication logic
-				const token = genericParse(
-					getNonEmptyString,
-					req.cookies.token
+				const accessToken = StringUtils.getNonEmptyString(
+					req.cookies[AuthConstants.ACCESS_TOKEN]
 				);
-				if (!token) {
-					throw new Error("No token provided");
+				const refreshToken = StringUtils.getNonEmptyString(
+					req.cookies[AuthConstants.REFRESH_TOKEN]
+				);
+				const authResponse = await AuthService.getAuthenticatedUser({
+					accessToken,
+					refreshToken,
+				});
+				if (!SafetyUtils.isNonNull(authResponse)) {
+					const cookies = AuthService.getCookies({
+						accessToken: null,
+						refreshToken: null,
+						logout: true,
+					});
+					return new ApiFailure(res)
+						.status(HTTP.status.UNAUTHORIZED)
+						.message(HTTP.message.UNAUTHORIZED)
+						.cookies(cookies)
+						.send();
 				}
-				return next(req, res);
+				const {
+					user,
+					accessToken: newAccessToken,
+					refreshToken: newRefreshToken,
+				} = authResponse;
+				const cookies = AuthService.getUpdatedCookies(
+					{ accessToken, refreshToken },
+					{
+						accessToken: newAccessToken,
+						refreshToken: newRefreshToken,
+					}
+				);
+				if (cookies.length > 0) {
+					new ApiSuccess(res).cookies(cookies);
+				}
+				req.user = user;
 			} catch (error) {
 				Logger.error(error);
-				return new ApiFailure(res).send(
-					HTTP.message.UNAUTHORIZED,
-					HTTP.status.UNAUTHORIZED
-				);
+				const cookies = AuthService.getCookies({
+					accessToken: null,
+					refreshToken: null,
+					logout: true,
+				});
+				return new ApiFailure(res)
+					.status(HTTP.status.UNAUTHORIZED)
+					.message(HTTP.message.UNAUTHORIZED)
+					.cookies(cookies)
+					.send();
 			}
-		};
-	}
-	public static adminRoute(next: ApiController): ApiController {
-		return async (req: ApiRequest, res: ApiResponse) => {
-			try {
-				// Update with your authentication logic
-				// Check if the user is an admin
-				const role = genericParse(getNonEmptyString, req.cookies.role);
-				if (role !== USER_ROLE.ADMIN) {
-					throw new Error("Not an admin");
-				}
-				return next(req, res);
-			} catch (error) {
-				Logger.error(error);
-				return new ApiFailure(res).send(
-					HTTP.message.FORBIDDEN,
-					HTTP.status.FORBIDDEN
-				);
-			}
+			return next(req, res);
 		};
 	}
 }
