@@ -1,35 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { IUser } from "../client";
+import * as ApiRequests from "./requests";
+import * as ApiResponses from "./responses";
 
-export * as ApiRequests from "./requests";
-export * as ApiResponses from "./responses";
+export * from "./base";
 
-export type ApiRequest<T = any> = Omit<NextApiRequest, "body"> & {
-	body: T;
-	user?: IUser;
-};
-export type ApiResponse = NextApiResponse;
-
-export type ApiRes<T> = { message: string; data: T };
-
-export type ApiController = (_: ApiRequest, __: ApiResponse) => Promise<void>;
-
-export type ApiControllers = {
-	GET?: ApiController;
-	POST?: ApiController;
-	PUT?: ApiController;
-	PATCH?: ApiController;
-	DELETE?: ApiController;
-};
-
-export type ApiWrapperOptions = {
-	db?: boolean;
-	auth?: boolean;
-	admin?: boolean;
-};
-
-export type T_API_METHODS = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-
-export type Headers = {
-	[key: string]: any;
-};
+export type { ApiRequests, ApiResponses };

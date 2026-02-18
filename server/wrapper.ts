@@ -1,4 +1,5 @@
-import { apiMethods, dbUri, HTTP } from "@/constants";
+import { apiMethods, backendBaseUrl, dbUri, HTTP } from "@/constants";
+import { DatabaseManager, DbContainer } from "@/db";
 import { ApiError, DbConnectionError, ParserSafetyError } from "@/errors";
 import { Logger } from "@/log";
 import { ApiFailure, ServerMiddleware } from "@/server";
@@ -8,18 +9,18 @@ import {
 	ApiRequest,
 	ApiResponse,
 	ApiWrapperOptions,
-	DbContainer,
 	T_API_METHODS,
 } from "@/types";
+import { StringUtils } from "@/utils";
 import { MongooseError } from "mongoose";
 import { NextApiHandler } from "next";
-import { DatabaseManager } from "../connections";
 
 export class ApiRoute {
 	// Options for API Wrapper
-	private useDatabase = false;
-	private isAdmin = false;
-	private isAuthenticated = false;
+	private readonly useDatabase: boolean = false;
+	private readonly isAdmin: boolean = false;
+	private readonly isAuthenticated: boolean = false;
+	private readonly needToValidatePrivateKey: boolean = false;
 	private dbContainer: DbContainer;
 
 	// API Controllers
@@ -58,6 +59,7 @@ export class ApiRoute {
 
 		if (admin === true) {
 			this.useDatabase = true;
+			this.isAuthenticated = true;
 			this.isAdmin = true;
 		}
 
@@ -94,10 +96,7 @@ export class ApiRoute {
 	 * @return {ApiController} The wrapped controller with the applied middleware.
 	 */
 	private wrapper(controller: ApiController): ApiController {
-		// controller = ServerMiddleware.responseBodyPopulator(controller);
-		if (this.isAdmin) {
-			return ServerMiddleware.adminRoute(controller);
-		} else if (this.isAuthenticated) {
+		if (this.isAuthenticated) {
 			return ServerMiddleware.authenticatedRoute(controller);
 		} else {
 			return controller;
@@ -110,7 +109,12 @@ export class ApiRoute {
 	 * @param {ApiResponse} res - The API response object.
 	 * @param {number} startTime - The start time of the request execution.
 	 */
-	private log(req: ApiRequest, res: ApiResponse, startTime: number): void {
+	private log(
+		status: "success" | "failure",
+		req: ApiRequest,
+		res: ApiResponse,
+		startTime: number
+	): void {
 		const executionTime = Date.now() - startTime;
 		const request = {
 			method: req.method,
@@ -118,6 +122,18 @@ export class ApiRoute {
 			body: req.body,
 			headers: req.headers,
 		};
+		let requestCurl = "\ncurl";
+		requestCurl += ` -X ${request.method}`;
+		requestCurl += ` --location '${backendBaseUrl}${request.uri}' \\`;
+		if (request.headers) {
+			for (const [key, value] of Object.entries(request.headers)) {
+				requestCurl += `\n--header '${key}: ${value}' \\`;
+			}
+		}
+		if (request.body) {
+			requestCurl += `\n--data '${JSON.stringify(request.body)}'`;
+		}
+		requestCurl += "\n";
 		const response = {
 			status: res.statusCode,
 			headers: res.getHeaders ? res.getHeaders() : {}, // Assuming `getHeaders` exists
@@ -126,8 +142,9 @@ export class ApiRoute {
 		Logger.info(
 			`${request.method} ${response.status} ${request.uri} - ${response.time}ms`
 		);
-		Logger.debug("Request", request);
-		Logger.debug("Response", response);
+		Logger.debug(status.toUpperCase(), "Request", request);
+		Logger.debug(status.toUpperCase(), "Request Curl", requestCurl);
+		Logger.debug(status.toUpperCase(), "Response", response);
 	}
 
 	/**
@@ -137,34 +154,23 @@ export class ApiRoute {
 	 * @return {NextApiHandler} A Next.js API handler function.
 	 */
 	public getHandler(): NextApiHandler {
-		const handler: NextApiHandler = async (
-			req: ApiRequest,
-			res: ApiResponse
-		) => {
+		return async (req: ApiRequest, res: ApiResponse) => {
 			const startTime = Date.now();
 			try {
 				if (this.useDatabase) {
-					this.dbContainer.db.connect();
-					/* if (this.dbContainer.db.isConnected() === false) {
-						return new ApiFailure(res)
-							.status(HTTP.status.SERVICE_UNAVAILABLE)
-							.message("Database not initialized")
-							.send();
-					} */
+					await this.dbContainer.db.connect();
 				}
 
-				const { method } = req;
+				const method = StringUtils.valueOf<T_API_METHODS>(
+					req.method || "GET"
+				);
 				// We need the handler to run by async/await to catch errors
 				let result: void;
 
 				Logger.debug(
 					"method and handler",
 					method,
-					typeof this.GET,
-					typeof this.POST,
-					typeof this.PUT,
-					typeof this.PATCH,
-					typeof this.DELETE
+					`${method} = ${method ? this[method]?.name : "undefined"}`
 				);
 				if (method === apiMethods.GET && this.GET !== undefined) {
 					result = await this.wrapper(this.GET)(req, res);
@@ -195,10 +201,10 @@ export class ApiRoute {
 						.message(`Method ${method} Not Allowed`)
 						.send();
 				}
-				this.log(req, res, startTime);
+				this.log("success", req, res, startTime);
 				return result;
 			} catch (error: any) {
-				this.log(req, res, startTime);
+				this.log("failure", req, res, startTime);
 				if (error instanceof ApiError) {
 					return new ApiFailure(res)
 						.status(error.status)
@@ -229,7 +235,5 @@ export class ApiRoute {
 				}
 			}
 		};
-
-		return handler;
 	}
 }
