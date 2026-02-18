@@ -1,5 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { IUser } from "@/types";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export type ApiRequest<T = any> = Omit<NextApiRequest, "body"> & {
 	body: T;
@@ -35,3 +35,7 @@ export type ApiWrapperOptions = {
 };
 
 export type T_API_METHODS = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+
+export type Headers = {
+	[key: string]: any;
+};

@@ -6,4 +6,5 @@ export const AuthMappingModel = new ModelFactory<AuthMapping>(
 	"AuthMapping",
 	AuthMappingSchema
 ).model;
+
 export const UserModel = new ModelFactory<User>("User", UserSchema).model;

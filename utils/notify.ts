@@ -1,12 +1,12 @@
 import toast from "react-hot-toast";
 
 export class Notify {
-	// if someone call notify.success(), make a success toast
+	// if someone call Notify.success(), make a success toast
 	public static success(message: string) {
 		toast.success(message);
 	}
 
-	// if someone call notify.error(), make an error toast
+	// if someone call Notify.error(), make an error toast
 	public static error(error: any, fallback: string = "An error occurred") {
 		if (typeof error === "string") {
 			toast.error(error);
@@ -24,12 +24,12 @@ export class Notify {
 		}
 	}
 
-	// if someone call notify.info(), make an info toast
+	// if someone call Notify.info(), make an info toast
 	public static info(message: string) {
 		toast(message);
 	}
 
-	// if someone call notify.warn(), make an warn toast
+	// if someone call Notify.warn(), make an warn toast
 	public static warn(message: string) {
 		toast(message, {
 			icon: "⚠️",

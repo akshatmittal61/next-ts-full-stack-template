@@ -1,4 +1,13 @@
+/**
+ * A class that provides utility functions for validating objects and arrays.
+ */
 export class Validators {
+	/**
+	 * Checks if two objects are the same.
+	 * @param {T} obj1 The first object to compare.
+	 * @param {T} obj2 The second object to compare.
+	 * @returns {boolean} True if the objects are the same, false otherwise.
+	 */
 	public static isSameObject<T extends object>(obj1: T, obj2: T): boolean {
 		if (Object.keys(obj1).length !== Object.keys(obj2).length) {
 			return false;
@@ -24,6 +33,12 @@ export class Validators {
 		return true;
 	}
 
+	/**
+	 * Checks if two arrays are the same.
+	 * @param {T[]} arr1 The first array to compare.
+	 * @param {T[]} arr2 The second array to compare.
+	 * @returns {boolean} True if the arrays are the same, false otherwise.
+	 */
 	public static isSameArray<T extends any>(arr1: T[], arr2: T[]): boolean {
 		if (arr1.length !== arr2.length) {
 			return false;
