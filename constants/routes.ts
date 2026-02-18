@@ -6,6 +6,8 @@ export class Routes {
 	public static readonly ABOUT = "/about";
 	public static readonly HELP = "/help";
 	public static readonly CONTACT = "/contact";
+	public static readonly PRIVACY_POLICY = "/privacy-policy";
+	public static readonly TERMS_AND_CONDITIONS = "/terms-and-conditions";
 	public static readonly ERROR = "/500";
 	public static readonly NOT_FOUND = "/404";
 

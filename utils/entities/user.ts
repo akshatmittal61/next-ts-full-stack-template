@@ -1,3 +1,4 @@
+import { fallbackAssets } from "@/constants";
 import { IUser } from "@/types";
 import { BooleanUtils, SafetyUtils, StringUtils } from "@/utils";
 
@@ -12,8 +13,13 @@ export class UserUtils {
 	public static getUserDetails(user: IUser): IUser {
 		return {
 			...user,
+			avatar: user.avatar || fallbackAssets.avatar,
 			name: user.name || user.email.split("@")[0],
 		};
+	}
+
+	public static getUserAvatar(user: IUser): string {
+		return user.avatar || fallbackAssets.avatar;
 	}
 
 	public static getNameOfUser(user: IUser): string {

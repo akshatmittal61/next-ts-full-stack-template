@@ -12,6 +12,8 @@ export class AppSeo {
 	static type: SeoProps["type"];
 	static siteName: SeoProps["siteName"];
 	static themeColor: SeoProps["themeColor"] = "#3f51b5";
+	static favicon: string = `${frontendBaseUrl}/favicon.png`;
+	static fullLogo: string = `${frontendBaseUrl}/logo-full.png`;
 	static icons: SeoProps["icons"] = [
 		"icon",
 		"shortcut icon",
