@@ -9,6 +9,7 @@ import { PageProps } from "./types";
 
 export const Page = <T extends PageProps = PageProps>({
 	children,
+	seo,
 	...props
 }: T) => {
 	const router = useRouter();
@@ -51,6 +52,7 @@ export const Page = <T extends PageProps = PageProps>({
 				icons={AppSeo.icons}
 				twitter={AppSeo.twitter}
 				og={AppSeo.og}
+				{...seo}
 			/>
 			<main
 				{...props}

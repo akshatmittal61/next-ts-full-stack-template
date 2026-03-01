@@ -3,6 +3,7 @@ import { BooleanUtils, CollectionUtils, StringUtils } from "@/utils";
 export class Routes {
 	// Web routes
 	public static readonly ROOT = "/";
+	public static readonly DASHBOARD = "/dashboard";
 	public static readonly ABOUT = "/about";
 	public static readonly HELP = "/help";
 	public static readonly CONTACT = "/contact";
@@ -36,6 +37,7 @@ export class Routes {
 		const appContainerSupportedRoutes: Array<string | Function> = [
 			Routes.HOME,
 			Routes.ADMIN,
+			Routes.DASHBOARD,
 			Routes.PROFILE,
 		];
 		if (CollectionUtils.includes(appContainerSupportedRoutes, path)) {

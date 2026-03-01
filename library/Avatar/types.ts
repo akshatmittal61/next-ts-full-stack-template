@@ -10,3 +10,9 @@ export interface IAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
 	isClickable?: boolean;
 	size?: "small" | "medium" | "large" | number;
 }
+
+export interface IAvatarsProps
+	extends Omit<IAvatarProps, "src" | "alt" | "children"> {
+	children: Array<{ src: string; alt: string }>;
+	stack?: boolean;
+}

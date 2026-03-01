@@ -1,3 +1,4 @@
+import { Page } from "@/layouts";
 import {
 	Avatar,
 	Button,
@@ -14,13 +15,13 @@ import React, { useState } from "react";
 import { FiAlertTriangle } from "react-icons/fi";
 
 const HomePage: React.FC = () => {
-	const { user, isLoading, isLoggedIn } = useAuthStore({ syncOnMount: true });
+	const { user, isSyncing, isLoggedIn } = useAuthStore();
 	const [check, setCheck] = useState(false);
 	const [openPopup, setOpenPopup] = useState(false);
 	const [openPane, setOpenPane] = useState(false);
 	return (
 		<>
-			<main className="w-screen h-screen flex justify-center items-center flex-col gap-4">
+			<Page className="w-screen h-screen flex justify-center items-center flex-col gap-4">
 				<Typography
 					className="text-blue-600"
 					as="h1"
@@ -31,8 +32,8 @@ const HomePage: React.FC = () => {
 				</Typography>
 				<pre>
 					{JSON.stringify(
-						isLoading
-							? { state: "loading" }
+						isSyncing
+							? { state: "syncing" }
 							: isLoggedIn
 								? { state: "loggedIn", user }
 								: { state: "loggedOut", user },
@@ -65,7 +66,7 @@ const HomePage: React.FC = () => {
 						onChange={() => setCheck((p) => !p)}
 					/>
 				</div>
-			</main>
+			</Page>
 			{openPopup ? (
 				<Popup
 					onEdit={() => Logger.info("Edit")}
@@ -81,7 +82,7 @@ const HomePage: React.FC = () => {
 					direction="bottom"
 					onClose={() => setOpenPane(false)}
 				>
-					You are in a pane
+					You are in pain
 				</Pane>
 			) : null}
 		</>

@@ -1,5 +1,6 @@
 import { Error } from "@/components";
 import { frontendBaseUrl } from "@/constants";
+import { Page } from "@/layouts";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -16,15 +17,17 @@ const PageNotFound: React.FC<PageNotFoundProps> = ({
 }) => {
 	const router = useRouter();
 	return (
-		<Error
-			title={title}
-			description={description}
-			image={image}
-			button={{
-				label: "Let's get you home",
-				action: () => router.push("/"),
-			}}
-		/>
+		<Page>
+			<Error
+				title={title}
+				description={description}
+				image={image}
+				button={{
+					label: "Let's get you home",
+					action: () => router.push("/"),
+				}}
+			/>
+		</Page>
 	);
 };
 

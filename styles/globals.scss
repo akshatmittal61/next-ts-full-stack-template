@@ -5,16 +5,23 @@
 @tailwind utilities;
 
 ::-webkit-scrollbar {
-	width: 1.5px;
-	height: 1.5px;
-	background: transparent;
-
-	&-thumb {
-		background: transparent;
-		border-radius: 500px;
-	}
+	width: 0px;
+	height: 0px;
+	background-color: transparent;
 
 	&-track {
-		background: transparent;
+		background-color: transparent;
+	}
+
+	&-thumb {
+		background-color: transparent;
+
+		&:hover {
+			background-color: transparent;
+		}
+
+		&:hover {
+			background-color: transparent;
+		}
 	}
 }

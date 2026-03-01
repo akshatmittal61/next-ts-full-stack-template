@@ -1,5 +1,10 @@
 import { fallbackAssets } from "@/constants";
-import { getImageUrlFromDriveLink, stylesConfig } from "@/utils";
+import {
+	BooleanUtils,
+	getImageUrlFromDriveLink,
+	StringUtils,
+	stylesConfig,
+} from "@/utils";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
@@ -18,13 +23,17 @@ export const Avatar: React.FC<IAvatarProps> = ({
 	isClickable,
 	...props
 }) => {
-	const [isImageValid, setIsImageValid] = useState(
-		src && (src.startsWith("https://") || src.startsWith("/"))
-			? true
-			: false
-	);
+	const [isImageValid, setIsImageValid] = useState(() => {
+		return (
+			StringUtils.isNotEmpty(src) &&
+			(src.startsWith("https://") || src.startsWith("/"))
+		);
+	});
 	const imageUrl = (() => {
-		if (src && (src.startsWith("https://") || src.startsWith("/"))) {
+		if (
+			StringUtils.isNotEmpty(src) &&
+			(src.startsWith("https://") || src.startsWith("/"))
+		) {
 			return getImageUrlFromDriveLink(src);
 		}
 		return "";
@@ -45,9 +54,10 @@ export const Avatar: React.FC<IAvatarProps> = ({
 
 	useEffect(() => {
 		setIsImageValid(
-			src && (src.startsWith("https://") || src.startsWith("/"))
-				? true
-				: false
+			BooleanUtils.valueOf(
+				StringUtils.isNotEmpty(src) &&
+					(src.startsWith("https://") || src.startsWith("/"))
+			)
 		);
 	}, [src, fallback]);
 
