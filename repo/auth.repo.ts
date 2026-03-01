@@ -1,11 +1,11 @@
 import { FilterQuery, UpdateQuery } from "@/db";
-import { AuthMappingModel } from "@/models";
 import { AuthMapping, CreateModel, IAuthMapping, IUser } from "@/types";
 import { getObjectFromMongoResponse, SafetyUtils } from "@/utils";
 import { BaseRepo } from "./base";
+import { Models } from "@/models";
 
 class AuthRepo extends BaseRepo<AuthMapping, IAuthMapping> {
-	protected model = AuthMappingModel;
+	protected model = Models.AuthMapping;
 
 	public parser(input: AuthMapping | null): IAuthMapping | null {
 		const res = super.parser(input);

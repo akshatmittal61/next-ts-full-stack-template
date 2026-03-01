@@ -2,6 +2,7 @@ import { apiMethods, backendBaseUrl, dbUri, HTTP } from "@/constants";
 import { DatabaseManager, DbContainer } from "@/db";
 import { ApiError, DbConnectionError, ParserSafetyError } from "@/errors";
 import { Logger } from "@/log";
+import { Models } from "@/models";
 import { ApiFailure, ServerMiddleware } from "@/server";
 import {
 	ApiController,
@@ -20,7 +21,6 @@ export class ApiRoute {
 	private readonly useDatabase: boolean = false;
 	private readonly isAdmin: boolean = false;
 	private readonly isAuthenticated: boolean = false;
-	private readonly needToValidatePrivateKey: boolean = false;
 	private dbContainer: DbContainer;
 
 	// API Controllers
@@ -159,6 +159,7 @@ export class ApiRoute {
 			try {
 				if (this.useDatabase) {
 					await this.dbContainer.db.connect();
+					Models.init();
 				}
 
 				const method = StringUtils.valueOf<T_API_METHODS>(

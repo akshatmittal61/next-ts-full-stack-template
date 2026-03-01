@@ -1,9 +1,9 @@
-import { UserModel } from "@/models";
+import { Models } from "@/models";
 import { IUser, User } from "@/types";
 import { BaseRepo } from "./base";
 
 class UserRepo extends BaseRepo<User, IUser> {
-	protected model = UserModel;
+	protected model = Models.User;
 
 	public async findByEmail(email: string): Promise<IUser | null> {
 		const res = await this.model.findOne({ email });
