@@ -2,7 +2,6 @@ import React from "react";
 
 interface IResponsiveRow extends React.HTMLAttributes<HTMLDivElement> {
 	children: React.ReactNode;
-	className?: string;
 }
 
 interface IResponsiveCol extends React.HTMLAttributes<HTMLDivElement> {

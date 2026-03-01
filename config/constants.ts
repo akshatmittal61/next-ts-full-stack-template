@@ -14,9 +14,6 @@ export const nodeEnv: T_NODE_ENV =
 
 export const service = process.env.NEXT_PUBLIC_SERVICE || "template";
 
-export const enableDebugging: boolean =
-	process.env.NEXT_PUBLIC_ENABLE_DEBUGGING === "true" || false;
-
 export const jwtSecret = Object.freeze({
 	authRefresh: process.env.JWT_AUTH_REFRESH_SECRET || "",
 	authAccess: process.env.JWT_AUTH_ACCESS_SECRET || "",

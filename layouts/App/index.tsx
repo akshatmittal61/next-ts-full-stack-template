@@ -5,6 +5,7 @@ import { Loader } from "@/library";
 import { useAppStore } from "@/store";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { Toaster } from "react-hot-toast";
 
 interface AppModuleProps {
 	children: React.ReactNode;
@@ -67,6 +68,7 @@ export const AppModule: React.FC<AppModuleProps> = ({ children }) => {
 			) : null}
 			{showLoader ? <Loader.Bar /> : null}
 			{children}
+			<Toaster position="top-center" />
 			{Routes.supportsFooter(router.pathname) ? <Footer /> : null}
 		</>
 	);

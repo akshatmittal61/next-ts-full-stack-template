@@ -72,11 +72,12 @@ const FabButtonComponent: React.ForwardRefRenderFunction<
 					{ "btn--disabled": disabled }
 				)} ${className}`}
 				disabled={disabled}
-				onClick={(() => {
+				onClick={(e) => {
 					if (options && options.length > 0) {
-						return () => setOpenOptions((p) => !p);
-					} else return onClick;
-				})()}
+						setOpenOptions((p) => !p);
+					}
+					if (onClick) onClick(e);
+				}}
 				ref={ref}
 				{...props}
 			>

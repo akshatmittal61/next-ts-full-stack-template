@@ -3,6 +3,8 @@ import {
 	Avatar,
 	Button,
 	CheckBox,
+	FabButton,
+	IconButton,
 	Input,
 	MaterialIcon,
 	Pane,
@@ -11,6 +13,7 @@ import {
 } from "@/library";
 import { Logger } from "@/log";
 import { useAuthStore } from "@/store";
+import { Notify } from "@/utils";
 import React, { useState } from "react";
 import { FiAlertTriangle } from "react-icons/fi";
 
@@ -46,7 +49,10 @@ const HomePage: React.FC = () => {
 					alt="Akshat"
 					size="small"
 				/>
-				<MaterialIcon icon="home" />
+				<IconButton
+					icon={<MaterialIcon icon="home" />}
+					onClick={() => Notify.info("Home")}
+				/>
 				<Button
 					onClick={() => {
 						throw new Error("Just for Error Boundary");
@@ -66,6 +72,13 @@ const HomePage: React.FC = () => {
 						onChange={() => setCheck((p) => !p)}
 					/>
 				</div>
+				<FabButton
+					icon={<FiAlertTriangle />}
+					onClick={(e) => {
+						e.stopPropagation();
+						Notify.info("Fab");
+					}}
+				/>
 			</Page>
 			{openPopup ? (
 				<Popup
