@@ -1,4 +1,4 @@
-import { USER_ROLE } from "@/constants";
+import { fallbackAssets, USER_ROLE } from "@/constants";
 import { Schema, User } from "@/types";
 
 export const UserSchema: Schema<User> = {
@@ -13,6 +13,11 @@ export const UserSchema: Schema<User> = {
 			unique: true,
 			sparse: true,
 		},
+	},
+	avatar: {
+		type: String,
+		required: false,
+		default: fallbackAssets.avatar,
 	},
 	role: {
 		type: String,
