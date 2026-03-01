@@ -9,16 +9,18 @@ const classes = stylesConfig(styles, "avatars");
 export const Avatars: React.FC<IAvatarsProps> = ({
 	children,
 	stack = true,
+	className,
+	limit = 4,
 	...props
 }) => {
 	return (
 		<div
-			className={classes("")}
+			className={classes("") + ` ${className ?? ""}`}
 			title={children.map((c) => c.alt).join(", ")}
 		>
-			{/* if there are more than 4, show only the first 4 and one more cell showing the count */}
-			{(children.length > 4
-				? [children[0], children[1], children[2], children[3]]
+			{/* if there are more than limit, show only the first limit and one more cell showing the count */}
+			{(children.length > limit
+				? children.slice(0, limit)
 				: children
 			).map((child, index) => (
 				<Avatar
@@ -38,14 +40,12 @@ export const Avatars: React.FC<IAvatarsProps> = ({
 					}}
 				/>
 			))}
-			{children.length > 4 ? (
+			{children.length > limit ? (
 				<Avatar
-					src=""
-					alt={`+${children.length - 4}`}
+					src={`https://ui-avatars.com/api/?name=%2B${children.length - limit}&background=random`}
+					alt={`+${children.length - limit}`}
 					size={props.size}
 					style={{
-						backgroundColor: "var(--theme-green)",
-						color: "var(--theme-white)",
 						marginLeft: stack ? -(props.size || 50) / 3 : 8,
 						...props.style,
 					}}

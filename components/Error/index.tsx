@@ -1,9 +1,8 @@
-import { frontendBaseUrl } from "@/constants";
 import { Seo } from "@/components";
-import { Button, Typography } from "@/library";
+import { frontendBaseUrl } from "@/constants";
+import { Button, Multimedia, Typography } from "@/library";
 import styles from "@/styles/pages/Error.module.scss";
 import { stylesConfig } from "@/utils";
-import Image from "next/image";
 import React from "react";
 
 interface ErrorPageProps {
@@ -74,7 +73,12 @@ export const Error: React.FC<ErrorPageProps> = ({
 					</Button>
 				</div>
 				<div className={classes("-image")}>
-					<Image src={image} alt={title} width={800} height={600} />
+					<Multimedia.Image
+						src={image}
+						alt={title}
+						width={800}
+						height={600}
+					/>
 				</div>
 			</main>
 		</>

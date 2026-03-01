@@ -6,6 +6,7 @@ export * from "./Checkbox";
 export * from "./icons";
 export * from "./Input";
 export * as Loader from "./Loader";
+export * from "./Multimedia";
 export * from "./Pane";
 export * from "./Popup";
 export * from "./Typography";
