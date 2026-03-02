@@ -1,5 +1,14 @@
 import type { NextConfig } from "next";
 import path from "path";
+const runtimeCaching = require("next-pwa/cache");
+
+const withPWA = require("next-pwa")({
+	dest: "public",
+	register: true,
+	skipWaiting: true,
+	runtimeCaching,
+	buildExcludes: [/middleware-manifest.json$/],
+});
 
 const nextConfig: NextConfig = {
 	/* config options here */
@@ -20,8 +29,17 @@ const nextConfig: NextConfig = {
 	sassOptions: {
 		includePaths: [path.join(process.cwd(), "styles")],
 		quiteDeps: true,
-		silenceDeprecations: ["legacy-js-api", "import"],
+		silenceDeprecations: [
+			"legacy-js-api",
+			"import",
+			"color-functions",
+			"global-builtin",
+			"mixed-decls",
+		],
 	},
 };
 
-export default nextConfig;
+const config =
+	process.env.NODE_ENV === "production" ? withPWA(nextConfig) : nextConfig;
+
+export default config;
